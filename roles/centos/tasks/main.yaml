@@ -1,0 +1,61 @@
+    - name: Update package cache
+      dnf:
+        name: '*'
+        state: latest
+      become: yes
+      when: ansible_distribution == "Debian"
+
+    - name: Install Java
+      dnf:
+        name: java-1.8.0-openjdk
+        state: present
+      become: yes
+      when: ansible_distribution == "Debian"
+
+    - name: Import Elasticsearch GPG key
+      rpm_key:
+        key: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+      become: yes
+      when: ansible_distribution == "Debian"
+
+    - name: Add Elasticsearch repository
+      yum_repository:
+        name: elasticsearch
+        description: Elasticsearch Yum Repo
+        baseurl: https://artifacts.elastic.co/packages/7.x/yum
+        gpgcheck: yes
+        gpgkey: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+        enabled: yes
+      become: yes
+      when: ansible_distribution == "Debian"
+
+    - name: Install Elasticsearch, Kibana, Logstash
+      dnf:
+        name: 
+          - elasticsearch
+          - kibana
+          - logstash
+        state: present
+      become: yes
+      when: ansible_distribution == "Debian"
+
+    - name: Start and enable Elasticsearch service
+      systemd:
+        name: elasticsearch
+        state: started
+        enabled: yes
+      when: ansible_distribution == "Debian"
+
+    - name: Start and enable kibana
+      systemd:
+        name: kibana
+        state: started
+        enabled: yes
+      when: ansible_distribution == "Debian"
+
+    - name: Start and enable Logstash
+      systemd:
+        name: logstash
+        state: started
+        enabled: yes
+      when: ansible_distribution == "Debian"

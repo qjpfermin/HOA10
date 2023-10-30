@@ -1,0 +1,7 @@
+---
+- name: Install and Configure Elastic Stack on Ubuntu and CentOS
+  hosts: all
+  become: yes
+  roles: 
+    - ubuntu
+    - centos
